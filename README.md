@@ -3,17 +3,12 @@
 This module simplifies the creation of an Amazon Kinesis Stream which can be accessed by different AWS accounts.
 
 ## Examples
+### Simple Example
 
 ```
 module "kinesis-stream" {
   source                    = "git::https://github.com/bnc-projects/terraform-aws-kinesis-stream.git?ref=1.0.0"
   kinesis_stream_name       = "${var.kinesis_stream_name}"
-  shard_count               = 1
-  retention_period          = 24
-  shard_level_metrics       = ["IncomingBytes","OutgoingBytes",]
-  enforce_consumer_deletion = false
-  encryption_type           = "KMS"
-  kms_key_id                = "alias/aws/kinesis"
   tags                      = "${merge(local.common_tags, var.tags)}"
 }
 ```
