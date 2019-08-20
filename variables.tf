@@ -15,12 +15,6 @@ variable "retention_period" {
   type        = number
 }
 
-variable "enforce_consumer_deletion" {
-  description = "A boolean that indicates all registered consumers should be deregistered from the stream so that the stream can be destroyed without error"
-  default     = false
-  type        = bool
-}
-
 variable "shard_level_metrics" {
   description = " A list of shard-level CloudWatch metrics which can be enabled for the stream"
   type        = list
