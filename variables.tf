@@ -52,13 +52,13 @@ variable "write_throughput_exceeded_name" {
 variable "read_throughput_comparison_operator" {
   type        = string
   description = "The arithmetic operation to use when comparing the specified Statistic and Threshold."
-  default     = "GreaterThanOrEqualToThreshold"
+  default     = "GreaterThanThreshold"
 }
 
 variable "write_throughput_comparison_operator" {
   type        = string
   description = "The arithmetic operation to use when comparing the specified Statistic and Threshold."
-  default     = "GreaterThanOrEqualToThreshold"
+  default     = "GreaterThanThreshold"
 }
 
 variable "read_throughput_evaluation_periods" {
@@ -148,11 +148,13 @@ variable "write_throughput_alarm_description" {
 variable "read_throughput_alarm_actions" {
   type        = list
   description = "The list of actions to execute when this alarm transitions into an ALARM state from any other state. Each action is specified as an Amazon Resource Name (ARN)."
+  default = []
 }
 
 variable "write_throughput_alarm_actions" {
   type        = list
   description = "The list of actions to execute when this alarm transitions into an ALARM state from any other state. Each action is specified as an Amazon Resource Name (ARN)."
+  default = []
 }
 
 variable "read_throughput_dimensions" {
