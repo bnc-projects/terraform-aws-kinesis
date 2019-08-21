@@ -13,3 +13,7 @@ output "read_throughout_exceed_alarm_name" {
 output "write_throughout_exceed_alarm_name" {
   value = aws_cloudwatch_metric_alarm.write_throughput_exceeded.arn
 }
+
+output "topic_arn" {
+  value = aws_sns_topic.sns_topic.arn
+}

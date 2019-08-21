@@ -9,6 +9,7 @@ resource "aws_kinesis_stream" "default" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "read_throughput_exceeded" {
+  count               = var.create_read_throughput_alarm == true ? 1 : 0
   alarm_name          = var.read_throughput_exceeded_name
   comparison_operator = var.read_throughput_comparison_operator
   evaluation_periods  = var.read_throughput_evaluation_periods
@@ -24,6 +25,7 @@ resource "aws_cloudwatch_metric_alarm" "read_throughput_exceeded" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "write_throughput_exceeded" {
+  count               = var.create_write_throughput_alarm == true ? 1 : 0
   alarm_name          = var.write_throughput_exceeded_name
   comparison_operator = var.write_throughput_comparison_operator
   evaluation_periods  = var.write_throughput_evaluation_periods
@@ -36,4 +38,16 @@ resource "aws_cloudwatch_metric_alarm" "write_throughput_exceeded" {
   treat_missing_data  = var.write_throughput_treat_missing_data
   dimensions          = var.write_throughput_dimensions
   alarm_actions       = var.write_throughput_alarm_actions
+}
+
+resource "aws_sns_topic" "sns_topic" {
+  count = var.create_sns_topic == true ? 1 : 0
+  name  = var.sns_topic_name
+}
+
+resource "aws_sns_topic_subscription" "lambda" {
+  count     = var.create_sns_topic_subscription == true ? 1 : 0
+  topic_arn = aws_sns_topic.sns_topic.arn
+  protocol  = "lambda"
+  endpoint  = var.lambda_endpoint
 }

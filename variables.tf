@@ -148,13 +148,13 @@ variable "write_throughput_alarm_description" {
 variable "read_throughput_alarm_actions" {
   type        = list
   description = "The list of actions to execute when this alarm transitions into an ALARM state from any other state. Each action is specified as an Amazon Resource Name (ARN)."
-  default = []
+  default     = []
 }
 
 variable "write_throughput_alarm_actions" {
   type        = list
   description = "The list of actions to execute when this alarm transitions into an ALARM state from any other state. Each action is specified as an Amazon Resource Name (ARN)."
-  default = []
+  default     = []
 }
 
 variable "read_throughput_dimensions" {
@@ -181,6 +181,39 @@ variable "write_throughput_treat_missing_data" {
   default     = "missing"
 }
 
+variable "sns_topic_name" {
+  type        = string
+  description = "The friendly name for the SNS topic."
+}
+
+variable "lambda_endpoint" {
+  type        = string
+  description = "The endpoint to send data to, the contents will vary with the protocol"
+}
+
+variable "create_read_throughput_alarm" {
+  type        = bool
+  description = "If this property is set to true, create an alarm for kinesis read throughput exceed metric, otherwise no."
+  default     = true
+}
+
+variable "create_write_throughput_alarm" {
+  type        = bool
+  description = "If this property is set to true, create an alarm for kinesis write throughput exceed metric, otherwise no."
+  default     = true
+}
+
+variable "create_sns_topic" {
+  type        = bool
+  description = "If this property is set to true, create a SNS topic, otherwise no."
+  default     = false
+}
+
+variable "create_sns_topic_subscription" {
+  type        = bool
+  description = "If this property is set to true, create a SNS topic subscription, otherwise no."
+  default     = false
+}
 
 
 
