@@ -47,7 +47,7 @@ resource "aws_sns_topic" "sns_topic" {
 
 resource "aws_sns_topic_subscription" "lambda" {
   count     = var.create_sns_topic_subscription == true ? 1 : 0
-  topic_arn = aws_sns_topic.sns_topic.arn
+  topic_arn = aws_sns_topic.sns_topic[0].arn
   protocol  = "lambda"
   endpoint  = var.lambda_endpoint
 }

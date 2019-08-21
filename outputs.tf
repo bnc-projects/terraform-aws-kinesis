@@ -15,5 +15,5 @@ output "write_throughout_exceed_alarm_name" {
 }
 
 output "topic_arn" {
-  value = aws_sns_topic.sns_topic.arn
+  value = aws_sns_topic.sns_topic[0].arn
 }
