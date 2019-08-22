@@ -7,13 +7,9 @@ output "kinesis_stream_name" {
 }
 
 output "read_throughout_exceed_alarm_name" {
-  value = aws_cloudwatch_metric_alarm.read_throughput_exceeded[0].arn
+value = aws_cloudwatch_metric_alarm.read_throughput_exceeded.arn
 }
 
 output "write_throughout_exceed_alarm_name" {
-  value = aws_cloudwatch_metric_alarm.write_throughput_exceeded[0].arn
-}
-
-output "topic_arn" {
-  value = aws_sns_topic.sns_topic[0].arn
+value = aws_cloudwatch_metric_alarm.write_throughput_exceeded.arn
 }

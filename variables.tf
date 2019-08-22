@@ -4,25 +4,10 @@ variable "alarm_actions" {
   default     = []
 }
 
-variable "create_firehose" {
-  type        = bool
-  description = "When set to true a AWS Firehose delivery stream is setup to process records from the Kinesis stream"
-  default     = false
-}
-
 variable "encryption_type" {
   type        = string
   default     = "KMS"
   description = "The encryption type to use"
-}
-
-variable "firehose_extended_s3_configuration" {
-  type        = map
-  description = "A object of the extended s3 object"
-}
-variable "firehose_name" {
-  type        = string
-  description = "The name of the firehose delivery stream"
 }
 
 variable "kinesis_stream_name" {
