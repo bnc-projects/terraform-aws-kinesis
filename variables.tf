@@ -93,6 +93,12 @@ variable "write_throughput_threshold" {
   default     = 0
 }
 
+variable "create_firehose" {
+  type        = bool
+  description = "Indicate whether to create kinesis firehose"
+  default     = false
+}
+
 
 
 
