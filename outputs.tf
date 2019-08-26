@@ -21,3 +21,7 @@ output "kinesis_firehose_arn" {
 output "kinesis_firehose_name" {
   value = aws_kinesis_firehose_delivery_stream.extended_s3_stream[0].name
 }
+
+output "firehose_alarm_name" {
+  value = aws_cloudwatch_metric_alarm.firehose_alarm[0].arn
+}

@@ -1,4 +1,4 @@
-variable "firehose_name" {
+variable "kinesis-firehose_name" {
   type        = string
   description = "The name of kinesis firehose"
 }
