@@ -5,10 +5,11 @@ locals {
   firehose_dimensions          = {
     DeliveryStreamName = var.kinesis-firehose_name
   }
+  count                        = var.create_firehose == false ? 0 : 1
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
-  count       = var.create_firehose == false ? 0 : 1
+  count       = local.count
   name        = var.kinesis-firehose_name
   destination = "extended_s3"
   tags        = var.tags
@@ -34,18 +35,18 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
-  count = var.create_firehose == false ? 0 : 1
+  count = local.count
   name  = format("%s-log-group", var.kinesis-firehose_name)
 }
 
 resource "aws_cloudwatch_log_stream" "log_stream" {
-  count          = var.create_firehose == false ? 0 : 1
+  count          = local.count
   name           = format("%s-log-stream", var.kinesis-firehose_name)
-  log_group_name = aws_cloudwatch_log_group.log_group.name
+  log_group_name = aws_cloudwatch_log_group.log_group[0].name
 }
 
 resource "aws_cloudwatch_metric_alarm" "firehose_alarm" {
-  count               = var.create_firehose == false ? 0 : 1
+  count               = local.count
   alarm_name          = format("%s-alarm", var.kinesis-firehose_name)
   comparison_operator = local.firehose_comparison_operator
   evaluation_periods  = var.firehose_alarm_evaluation_periods
