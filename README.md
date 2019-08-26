@@ -1,4 +1,4 @@
-# terraform-aws-kinesis-stream
+# terraform-aws-kinesis
 
 This module simplifies the creation of an Amazon Kinesis Stream which can be accessed by different AWS accounts.
 
@@ -7,7 +7,7 @@ This module simplifies the creation of an Amazon Kinesis Stream which can be acc
 
 ```
 module "kinesis-stream" {
-  source                    = "git::https://github.com/bnc-projects/terraform-aws-kinesis-stream.git?ref=1.0.0"
+  source                    = "git::https://github.com/bnc-projects/terraform-aws-kinesis.git?ref=1.0.0"
   kinesis_stream_name       = "${var.kinesis_stream_name}"
   tags                      = "${merge(local.common_tags, var.tags)}"
 }
