@@ -46,6 +46,12 @@ data "aws_iam_policy_document" "firehose_delivery_assume_policy" {
         "firehose.amazonaws.com"
       ]
     }
+
+    condition {
+      test     = "StringEquals"
+      values   = [var.aws_account_id]
+      variable = "sts:ExternalId"
+    }
   }
 }
 
