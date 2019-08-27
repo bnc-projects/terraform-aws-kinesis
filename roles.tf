@@ -10,7 +10,6 @@ resource "aws_iam_role_policy" "firehose_access_policy" {
   name   = "allow_firehose_read_from_kinesis_stream"
   role   = aws_iam_role.firehose_access_role[0].id
   policy = data.aws_iam_policy_document.read_from_kinesis_stream[0].json
-  tags   = var.tags
 }
 
 data "aws_iam_policy_document" "read_from_kinesis_stream" {
@@ -62,7 +61,6 @@ resource "aws_iam_role_policy" "firehose_delivery_policy" {
   name   = "allow_firehose_deliver_to_s3"
   role   = aws_iam_role.firehose_delivery_role[0].id
   policy = data.aws_iam_policy_document.firehose_delivery_policy_doc[0].json
-  tags   = var.tags
 }
 
 data "aws_iam_policy_document" "firehose_delivery_policy_doc" {
