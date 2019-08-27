@@ -85,7 +85,8 @@ data "aws_iam_policy_document" "firehose_delivery_policy_doc" {
     ]
 
     resources = [
-      var.s3_bucket_arn
+      var.s3_bucket_arn,
+      format("%s/*", var.s3_bucket_arn)
     ]
   }
 
