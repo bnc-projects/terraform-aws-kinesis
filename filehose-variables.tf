@@ -1,16 +1,19 @@
 variable "kinesis-firehose_name" {
   type        = string
   description = "The name of kinesis firehose"
+  default = ""
 }
 
 variable "s3_bucket_arn" {
   type        = string
   description = "The ARN of the S3 bucket"
+  default = ""
 }
 
 variable "s3_bucket_prefix" {
   type        = string
   description = "The name of the folder to store data"
+  default = ""
 }
 
 variable "buffer_size" {
@@ -59,4 +62,10 @@ variable "firehose_alarm_statistic" {
   type        = string
   description = "The statistic to apply to the alarm's associated metric. Either of the following is supported: SampleCount, Average, Sum, Minimum, Maximum"
   default     = "Sum"
+}
+
+variable "aws_account_id" {
+  type        = string
+  description = "The aws account of id that creates resources"
+  default     = ""
 }
