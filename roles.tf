@@ -120,20 +120,6 @@ data "aws_iam_policy_document" "firehose_delivery_policy_doc" {
   }
 
   statement {
-    sid = "AllowFirehoseToInvokeLambda"
-    effect = "Allow"
-
-    actions = [
-      "lambda:InvokeFunction",
-      "lambda:GetFunctionConfiguration"
-    ]
-
-    resources = [
-      format("%s:%s", var.processor_lambda_arn.lambda_arn, var.processor_lambda_arn.version)
-    ]
-  }
-
-  statement {
     sid = "AllowFirehoseToInvokeKms"
     effect = "Allow"
 

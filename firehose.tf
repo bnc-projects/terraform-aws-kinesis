@@ -33,18 +33,6 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
       log_stream_name = aws_cloudwatch_log_stream.log_stream[0].name
     }
 
-    processing_configuration {
-      enabled = var.processing_configuration_enable
-
-      processors {
-        type = "Lambda"
-        parameters {
-          parameter_name  = "LambdaArn"
-          parameter_value = format("%s:%s", var.processor_lambda_arn.lambda_arn, var.processor_lambda_arn.version)
-        }
-      }
-    }
-
     data_format_conversion_configuration {
       enabled = var.data_format_conversion_enable
 

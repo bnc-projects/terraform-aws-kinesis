@@ -138,28 +138,13 @@ variable "buffer_interval" {
 variable "compression_format" {
   type        = string
   description = "The compression format"
-  default     = ""
+  default     = "UNCOMPRESSED"
 }
 
 variable "cloudwatch_log_enable" {
   type        = bool
   description = "Check if the cloudwatch log is enabled"
   default     = true
-}
-
-variable "processing_configuration_enable" {
-  type        = bool
-  description = "Check if the data processing configuration is enabled"
-  default     = false
-}
-
-variable "processor_lambda_arn" {
-  type        = map(string)
-  description = "The ARN of the processor lambda"
-  default     = {
-    "lambda_arn" = ""
-    "version"    = "$LATEST"
-  }
 }
 
 variable "data_format_conversion_enable" {
