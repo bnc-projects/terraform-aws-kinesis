@@ -154,9 +154,12 @@ variable "processing_configuration_enable" {
 }
 
 variable "processor_lambda_arn" {
-  type        = string
+  type        = map(string)
   description = "The ARN of the processor lambda"
-  default     = ""
+  default     = {
+    "lambda_arn" = ""
+    "version"    = "$LATEST"
+  }
 }
 
 variable "data_format_conversion_enable" {

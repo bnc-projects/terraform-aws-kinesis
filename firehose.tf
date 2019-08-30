@@ -40,7 +40,7 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
         type = "Lambda"
         parameters {
           parameter_name  = "LambdaArn"
-          parameter_value = var.processor_lambda_arn
+          parameter_value = format("%s:%s", var.processor_lambda_arn.lambda_arn, var.processor_lambda_arn.version)
         }
       }
     }
