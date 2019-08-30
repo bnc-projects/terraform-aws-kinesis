@@ -60,8 +60,8 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
       }
       schema_configuration {
         database_name = var.data_format_conversion_schema.database_name
-        role_arn      = var.data_format_conversion_schema.role_arn
         table_name    = var.data_format_conversion_schema.table_name
+        role_arn      = aws_iam_role.firehose_delivery_role[0].arn
       }
     }
   }

@@ -201,7 +201,6 @@ variable "data_format_conversion_schema" {
   default     = {
     "database_name" = ""
     "table_name"    = ""
-    "role_arn"      = aws_iam_role.firehose_delivery_role[0].arn
   }
 }
 
