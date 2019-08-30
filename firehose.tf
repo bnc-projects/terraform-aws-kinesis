@@ -50,6 +50,7 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
         database_name = var.data_format_conversion_schema.database_name
         table_name    = var.data_format_conversion_schema.table_name
         role_arn      = aws_iam_role.firehose_delivery_role[0].arn
+        region        = var.data_format_conversion_schema.region
       }
     }
   }

@@ -187,8 +187,9 @@ variable "data_format_conversion_schema" {
   type        = map(string)
   description = "The schema configuration of glue table"
   default     = {
-    "database_name" = ""
-    "table_name"    = ""
+    database_name = ""
+    table_name    = ""
+    region        = ""
   }
 }
 
