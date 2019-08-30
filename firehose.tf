@@ -19,17 +19,39 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
   }
 
   extended_s3_configuration {
-    role_arn           = aws_iam_role.firehose_delivery_role[0].arn
-    bucket_arn         = var.s3_bucket_arn
-    prefix             = var.s3_bucket_prefix
-    buffer_interval    = var.buffer_interval
-    buffer_size        = var.buffer_size
-    compression_format = var.compression_format
+    role_arn            = aws_iam_role.firehose_delivery_role[0].arn
+    bucket_arn          = var.s3_bucket_arn
+    prefix              = var.s3_bucket_prefix
+    error_output_prefix = var.s3_bucket_error_prefix
+    buffer_interval     = var.buffer_interval
+    buffer_size         = var.buffer_size
+    compression_format  = var.compression_format
 
     cloudwatch_logging_options {
       enabled         = var.cloudwatch_log_enable
       log_group_name  = aws_cloudwatch_log_group.log_group[0].name
       log_stream_name = aws_cloudwatch_log_stream.log_stream[0].name
+    }
+
+    data_format_conversion_configuration {
+      enabled = var.data_format_conversion_enable
+
+      input_format_configuration {
+        deserializer {
+          open_x_json_ser_de {}
+        }
+      }
+      output_format_configuration {
+        serializer {
+          parquet_ser_de {}
+        }
+      }
+      schema_configuration {
+        database_name = var.data_format_conversion_schema.database_name
+        table_name    = var.data_format_conversion_schema.table_name
+        role_arn      = aws_iam_role.firehose_delivery_role[0].arn
+        region        = var.data_format_conversion_schema.region
+      }
     }
   }
 }

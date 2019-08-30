@@ -49,7 +49,8 @@ data "aws_iam_policy_document" "firehose_delivery_assume_policy" {
 
     condition {
       test     = "StringEquals"
-      values   = [var.aws_account_id]
+      values   = [
+        var.aws_account_id]
       variable = "sts:ExternalId"
     }
   }
@@ -98,6 +99,32 @@ data "aws_iam_policy_document" "firehose_delivery_policy_doc" {
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
+
+  statement {
+    sid = "AllowFirehoseToGetGlueTable"
+    effect    = "Allow"
+
+    actions   = [
+      "glue:GetTableVersions"
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
+
+  statement {
+    sid = "AllowFirehoseToInvokeKms"
+    effect = "Allow"
+
+    actions = [
+      "kms:Decrypt"
     ]
 
     resources = [
