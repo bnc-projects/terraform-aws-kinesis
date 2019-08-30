@@ -168,7 +168,7 @@ variable "firehose_alarm_threshold" {
 variable "firehose_alarm_period" {
   type        = number
   description = "The period in seconds over which the specified statistic is applied."
-  default     = 300
+  default     = 960
 }
 
 variable "firehose_alarm_statistic" {
