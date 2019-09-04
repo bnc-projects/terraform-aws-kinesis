@@ -177,12 +177,6 @@ variable "firehose_alarm_statistic" {
   default     = "Sum"
 }
 
-variable "aws_account_id" {
-  type        = string
-  description = "The aws account of id that creates resources"
-  default     = ""
-}
-
 variable "data_format_conversion_schema" {
   type        = map(string)
   description = "The schema configuration of glue table"
@@ -191,6 +185,12 @@ variable "data_format_conversion_schema" {
     table_name    = ""
     region        = ""
   }
+}
+
+variable "aws_account_id" {
+  type        = string
+  description = "The aws account id that creates resources"
+  default     = ""
 }
 
 
