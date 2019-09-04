@@ -1,67 +1,86 @@
 # terraform-aws-kinesis
 
-This module simplifies the creation of an Amazon Kinesis Stream which can be accessed by different AWS accounts.
+This module simplifies the creation of an Amazon Kinesis Stream and Kinesis Firehose which can be accessed by different AWS accounts.
 
 ## Examples
-### Simple Example
+### Simple Example to create Kinesis Stream
 
 ```
 module "kinesis-stream" {
   source                    = "git::https://github.com/bnc-projects/terraform-aws-kinesis.git?ref=1.0.0"
-  kinesis_stream_name       = "${var.kinesis_stream_name}"
-  tags                      = "${merge(local.common_tags, var.tags)}"
+  kinesis_stream_name       = "var.kinesis_stream_name"
+  tags                      = "merge(local.common_tags, var.tags)"
 }
 ```
 
+### Example to create both Kinesis Stream and Kinesis Firehose
+
+```
+module "kinesis_stream_and_firehose" {
+  source                        = "git::https://github.com/bnc-projects/terraform-aws-kinesis.git?ref=1.5.0"
+  kinesis_stream_name           = var.kinesis_stream_name
+  shard_count                   = 1
+  alarm_actions                 = [var.sns_alarm_arn]
+  read_throughput_threshold     = 0.5
+  write_throughput_threshold    = 0.3
+  create_firehose               = true
+  kinesis-firehose_name         = var.firehose_name
+  s3_bucket_arn                 = var.s3.arn
+  s3_bucket_prefix              = format("%s/", var.s3_bucket_prefix)
+  s3_bucket_error_prefix        = format("%s-err/", var.s3_bucket_prefix)
+  firehose_alarm_period         = 960
+  aws_account_id                = var.aws_account_id
+  data_format_conversion_enable = true
+  data_format_conversion_schema = {
+    database_name = var.catalog_database
+    table_name    = var.catalog_table
+    region        = var.aws_default_region
+  }
+  tags                          = merge(local.common_tags, var.tags)
+}
+```
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| kinesis_stream_name | A name to identify the stream | string | - | yes |
+| kinesis_stream_name | A name to identify the kinesis stream | string | - | yes |
 | shard_count | The number of shards that the stream will use | number | `1` | no |
 | retention_period | Length of time data records are accessible after they are added to the stream | number | `24` | no |
 | shard_level_metrics | A list of shard-level CloudWatch metrics which can be enabled for the stream | list | - | no |
 | encryption_type | The encryption type to use | string | `KMS` | no |
 | kms_key_id | he GUID for the customer-managed KMS key to use for encryption| string | `alias/aws/kinesis` | no |
+| alarm_actions | Actions to execute when this alarm transitions into an ALARM state from any other state. Each action is specified as an Amazon Resource Name (ARN) | list | `[]` | no |
+| read_throughput_evaluation_periods | The number of periods over which data is compared to the specified threshold.| number | `1` | no |
+| read_throughput_period | The period in seconds over which the specified statistic is applied | number | `60` | no |
+| read_throughput_statistic | The statistic to apply to the alarm's associated metric. Either of the following is supported: SampleCount, Average, Sum, Minimum, Maximum| string | `Average` | no |
+| read_throughput_threshold | The value against which the specified statistic is compared | number | `0` | no |
+| write_throughput_evaluation_periods | The number of periods over which data is compared to the specified threshold | number | `1` | no |
+| write_throughput_period | The period in seconds over which the specified statistic is applied.| number | `60` | no |
+| write_throughput_statistic | The statistic to apply to the alarm's associated metric. Either of the following is supported: SampleCount, Average, Sum, Minimum, Maximum| string | `Average` | no |
+| write_throughput_threshold | The value against which the specified statistic is compared | number | `0` | no |
+| create_firehose | Indicate whether to create a kinesis firehose | bool | `false` | no |
+| kinesis-firehose_name | A name to identify the kinesis firehose | string | `false` | no |
+| s3_bucket_arn | A name to identify s3 bucket to store kinesis firehose loading data| string | `""` | no |
+| s3_bucket_prefix | A name to identify s3 bucket folder to store kinesis firehose loading data| string | `""` | no |
+| s3_bucket_error_prefix | A name to identify s3 bucket folder to store error data loaded from kinesis firehose | string | `""` | no |
+| buffer_size | Buffer incoming data to the specified size, in MBs, before delivering it to the destination | number | `128` | no |
+| buffer_interval | Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination | number | `900` | no |
+| compression_format | The compression format| string | `UNCOMPRESSED` | no |
+| cloudwatch_log_enable | Indicate whether to create cloudwatch log for kinesis firehose | bool | `true` | no |
+| data_format_conversion_enable | Check if the data conversion is enabled | bool | `fasle` | no |
+| firehose_alarm_evaluation_periods |  The number of periods over which data is compared to the specified threshold | number | `1` | no |
+| firehose_alarm_threshold | The value against which the specified statistic is compared | number | `0` | no |
+| firehose_alarm_period | The period in seconds over which the specified statistic is applied | number | `960` | no |
+| firehose_alarm_statistic | The statistic to apply to the alarm's associated metric. Either of the following is supported: SampleCount, Average, Sum, Minimum, Maximum | string | `Sum` | no |
+| data_format_conversion_schema | The schema configuration of glue table | map | `map` | no |
+| aws_account_id | The aws account id that creates resources | string | `""` | no |
 | tags | A map of tags to add to the appropriate resources | map | `<map>` | no |
-| read_throughput_exceeded_name | The descriptive name for the alarm.| string | none | no |
-| write_throughput_exceeded_name | The descriptive name for the alarm.| string | none | no |
-| read_throughput_comparison_operator | The arithmetic operation to use when comparing the specified Statistic and Threshold.| string | `GreaterThanThreshold` | yes |
-| write_throughput_comparison_operator | The arithmetic operation to use when comparing the specified Statistic and Threshold.| string | `GreaterThanThreshold` | yes |
-| read_throughput_evaluation_periods | The number of periods over which data is compared to the specified threshold.| number | 1 | yes |
-| write_throughput_evaluation_periods | The number of periods over which data is compared to the specified threshold.| number | 1 | yes |
-| read_throughput_metric_name | The name for the alarm's associated metric. See docs for supported metrics.| string | `ReadProvisionedThroughputExceeded` | yes |
-| write_throughput_metric_name | The name for the alarm's associated metric. See docs for supported metrics.| string | `ReadProvisionedThroughputExceeded` | yes |
-| read_throughput_namespace | The namespace for the alarm's associated metric. See docs for the list of namespaces.| string | `AWS/Kinesis` | yes |
-| write_throughput_namespace | The namespace for the alarm's associated metric. See docs for the list of namespaces.| string | `AWS/Kinesis` | yes |
-| read_throughput_period | The period in seconds over which the specified statistic is applied.| number | 60 | yes |
-| write_throughput_period | The period in seconds over which the specified statistic is applied.| number | 60 | yes |
-| read_throughput_statistic | The statistic to apply to the alarm's associated metric. Either of the following is supported: SampleCount, Average, Sum, Minimum, Maximum| string | `Average` | yes |
-| write_throughput_statistic | The statistic to apply to the alarm's associated metric. Either of the following is supported: SampleCount, Average, Sum, Minimum, Maximum| string | `Average` | yes |
-| read_throughput_threshold | The value against which the specified statistic is compared.| number | 0 | yes |
-| write_throughput_threshold | The value against which the specified statistic is compared.| number | 0 | yes |
-| read_throughput_alarm_description | alarm description| string | none | no |
-| write_throughput_alarm_description | alarm description| string | none | no |
-| read_throughput_alarm_actions | The list of actions to execute when this alarm transitions into an ALARM state from any other state. Each action is specified as an Amazon Resource Name (ARN).| list |[] | yes |
-| write_throughput_alarm_actions | The list of actions to execute when this alarm transitions into an ALARM state from any other state. Each action is specified as an Amazon Resource Name (ARN).| list |[] | yes |
-| read_throughput_dimensions | The dimensions for the alarm's associated metric. | map | {} | yes |
-| write_throughput_dimensions | The dimensions for the alarm's associated metric. | map | {} | yes |
-| read_throughput_treat_missing_data | Sets how this alarm is to handle missing data points. The following values are supported: missing, ignore, breaching and notBreaching. Defaults to missing | string | `missing` | yes |
-| write_throughput_treat_missing_data | Sets how this alarm is to handle missing data points. The following values are supported: missing, ignore, breaching and notBreaching. Defaults to missing | string | `missing` | yes |
-| sns_topic_name |  The friendly name for the SNS topic. | string | none | yes |
-| lambda_endpoint |  The endpoint to send data to, the contents will vary with the protocol | string | none | yes |
-| create_read_throughput_alarm |  If this property is set to true, create an alarm for kinesis read throughput exceed metric, otherwise no. | bool | true | yes |
-| create_write_throughput_alarm |  If this property is set to true, create an alarm for kinesis write throughput exceed metric, otherwise no. | bool | true | yes |
-| create_sns_topic |  If this property is set to true, create a SNS topic, otherwise no. | bool | false | yes |
-| create_sns_topic_subscription|  If this property is set to true, create a SNS topic subscription, otherwise no. | bool | false | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| kinesis_stream_url  | The Amazon Resource Name (ARN) specifying the Stream |
-| kinesis_stream_name | The unique Stream name |
-| read_throughout_exceed_alarm_name | name of alarm e.g. `aws_cloudwatch_metric_alarm.read_throughput_exceeded.arn` |
-| write_throughout_exceed_alarm_name | write throughput exceeded e.g. `aws_cloudwatch_metric_alarm.write_throughput_exceeded.arn` |
-| topic_arn | topic arn |
-
+| kinesis_stream_arn | The Amazon Resource Name (ARN) specifying the Kinesis Stream |
+| kinesis_stream_name | The unique Kinesis Stream name |
+| kinesis_firehose_arn  | The Amazon Resource Name (ARN) specifying the Kinesis Firehose |
+| kinesis_firehose_name | The unique Kinesis Firehose Name |
