@@ -123,6 +123,18 @@ variable "s3_bucket_error_prefix" {
   default     = ""
 }
 
+variable "s3_bucket_backup_prefix" {
+  type        = string
+  description = "The name of the folder to store the  data"
+  default     = ""
+}
+
+variable "enable_s3_backup" {
+  type        = string
+  description = "Enable backup of the data before conversion"
+  default     = "Enabled"
+}
+
 variable "buffer_size" {
   type        = number
   description = "Buffer incoming data to the specified size, in MBs, before delivering it to the destination"
@@ -138,7 +150,7 @@ variable "buffer_interval" {
 variable "compression_format" {
   type        = string
   description = "The compression format"
-  default     = "UNCOMPRESSED"
+  default     = "Snappy"
 }
 
 variable "cloudwatch_log_enable" {
