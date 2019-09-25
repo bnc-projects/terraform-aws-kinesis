@@ -150,7 +150,7 @@ variable "buffer_interval" {
 variable "compression_format" {
   type        = string
   description = "The compression format"
-  default     = "Snappy"
+  default     = "SNAPPY"
 }
 
 variable "cloudwatch_log_enable" {

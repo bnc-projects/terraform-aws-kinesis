@@ -25,7 +25,7 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
     error_output_prefix = var.s3_bucket_error_prefix
     buffer_interval     = var.buffer_interval
     buffer_size         = var.buffer_size
-    compression_format  = var.compression_format
+    compression_format  = "UNCOMPRESSED"
 
     cloudwatch_logging_options {
       enabled         = var.cloudwatch_log_enable
