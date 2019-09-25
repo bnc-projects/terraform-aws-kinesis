@@ -1,6 +1,8 @@
 # terraform-aws-kinesis
 
-This module simplifies the creation of an Amazon Kinesis Stream and Kinesis Firehose which can be accessed by different AWS accounts.
+This module provides the ability to create a Amazon Kinesis Data Stream and a associated Kinesis Firehose Stream if required.
+
+The Kinesis Firehose Stream requires a glue catalog to ensure the records being read off the Kinesis Data Stream are converted to Parquet.
 
 ## Examples
 ### Simple Example to create Kinesis Stream
@@ -61,13 +63,15 @@ module "kinesis_stream_and_firehose" {
 | create_firehose | Indicate whether to create a kinesis firehose | bool | `false` | no |
 | kinesis-firehose_name | A name to identify the kinesis firehose | string | `false` | no |
 | s3_bucket_arn | A name to identify s3 bucket to store kinesis firehose loading data| string | `""` | no |
-| s3_bucket_prefix | A name to identify s3 bucket folder to store kinesis firehose loading data| string | `""` | no |
-| s3_bucket_error_prefix | A name to identify s3 bucket folder to store error data loaded from kinesis firehose | string | `""` | no |
+| s3_bucket_prefix | The s3 bucket folder to store the data which is being converted to Parquet | string | `""` | no |
+| s3_bucket_error_prefix | The s3 bucket folder to store the data if there are errors with conversion to Parquet | string | `""` | no |
+| s3_bucket_backup_prefix | The name of the folder to store the source data | string | `""` | no |
 | buffer_size | Buffer incoming data to the specified size, in MBs, before delivering it to the destination | number | `128` | no |
 | buffer_interval | Buffer incoming data for the specified period of time, in seconds, before delivering it to the destination | number | `900` | no |
-| compression_format | The compression format| string | `UNCOMPRESSED` | no |
+| compression_format | The compression format| string | `SNAPPY` | no |
 | cloudwatch_log_enable | Indicate whether to create cloudwatch log for kinesis firehose | bool | `true` | no |
-| data_format_conversion_enable | Check if the data conversion is enabled | bool | `fasle` | no |
+| data_format_conversion_enable | Check if the data conversion is enabled | bool | `false` | no |
+| enable_s3_backup | Enable backup of the source data | string | `Enabled` | no |
 | firehose_alarm_evaluation_periods |  The number of periods over which data is compared to the specified threshold | number | `1` | no |
 | firehose_alarm_threshold | The value against which the specified statistic is compared | number | `0` | no |
 | firehose_alarm_period | The period in seconds over which the specified statistic is applied | number | `960` | no |
