@@ -53,6 +53,17 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
         region        = var.data_format_conversion_schema.region
       }
     }
+
+    s3_backup_mode = var.enable_s3_backup
+
+    s3_backup_configuration {
+      bucket_arn         = var.s3_bucket_arn
+      buffer_interval    = var.buffer_interval
+      buffer_size        = var.buffer_size
+      compression_format = var.compression_format
+      prefix             = var.s3_bucket_backup_prefix
+      role_arn           = aws_iam_role.firehose_delivery_role[0].arn
+    }
   }
 }
 
