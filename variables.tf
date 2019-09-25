@@ -125,13 +125,13 @@ variable "s3_bucket_error_prefix" {
 
 variable "s3_bucket_backup_prefix" {
   type        = string
-  description = "The name of the folder to store the  data"
+  description = "The name of the folder to store the source data"
   default     = ""
 }
 
 variable "enable_s3_backup" {
   type        = string
-  description = "Enable backup of the data before conversion"
+  description = "Enable backup of the source data"
   default     = "Enabled"
 }
 
