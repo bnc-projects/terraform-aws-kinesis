@@ -93,3 +93,8 @@ variable "write_throughput_threshold" {
   default     = 0
 }
 
+variable "stream_mode"{
+  type        = string
+  description = "stream_mode can only be PROVISIONED or ON_DEMAND. default is PROVISIONED"
+  default     = "PROVISIONED"
+}
